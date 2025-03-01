@@ -1,24 +1,27 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const connectDB = require("./config/db");
+import express from 'express';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import authRoutes from "./routes/authRoutes.js";
+import folderRoutes from "./routes/folderRoutes.js";
+import imageRoutes from "./routes/imageRoutes.js";
+
 
 dotenv.config();
-connectDB();
-
 const app = express();
+
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static("uploads")); // Serve images
 
-// Import Routes
-const authRoutes = require("./routes/authRoutes");
-const folderRoutes = require("./routes/folderRoutes");
-const imageRoutes = require("./routes/imageRoutes");
+// routes
+app.use('/api/auth', authRoutes);
+app.use('/api/folders', folderRoutes);
+app.use('/api/images', imageRoutes);
 
-app.use("/api/auth", authRoutes);
-app.use("/api/folders", folderRoutes);
-app.use("/api/images", imageRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => {
+        app.listen(5000, () => {
+            console.log("✅ Backend server is running!");
+        });
+    })
+    .catch(err => console.log(err))

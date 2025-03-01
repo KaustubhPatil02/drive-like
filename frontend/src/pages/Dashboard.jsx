@@ -14,6 +14,8 @@ const Dashboard = () => {
   const [images, setImages] = useState([]);
   const [folderName, setFolderName] = useState("");
 
+  const [uploadProgress, setUploadProgress] = useState(0);
+
   const [currentFolder, setCurrentFolder] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [imageName, setImageName] = useState("");
@@ -30,119 +32,151 @@ const Dashboard = () => {
     setFolders(data);
   };
 
-  // const fetchImages = async () => {
-  //   const { data } = await axios.get("http://localhost:5000/api/images", {
-  //     headers: { Authorization: localStorage.getItem("token") },
-  //   });
-  //   setImages(data);
-  // };
-  // const fetchImages = async () => {
-  //   try {
-  //     const API = import.meta.env.VITE_API_URL;
-  //     const { data } = await axios.get(`${API}/api/images`, {
-  //       headers: { Authorization: localStorage.getItem("token") },
-  //     });
 
-  //     if (Array.isArray(data)) {
-  //       setImages(data); // ✅ Only set images if it's an array
-  //     } else {
-  //       console.error("Unexpected API response:", data);
-  //       setImages([]); // ✅ Prevent crash by setting an empty array
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching images:", error);
-  //     setImages([]); // ✅ Prevent crash even if API call fails
-  //   }
-  // };
 
-  const fetchImages = async () => {
+  const fetchImages = async (folderId = null) => {
     try {
-      const API = import.meta.env.VITE_API_URL;
+      // const API = import.meta.env.VITE_API_URL;
       const { data } = await axios.get(`${API}/api/images`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
 
       if (!Array.isArray(data)) {
-        // console.error("Unexpected API response:", data);
         setImages([]);
         return;
       }
 
-      setImages(data);
+      // ✅ Show only images inside the current folder
+      const filteredImages = folderId ? data.filter(img => img.folder === folderId) : data;
+      setImages(filteredImages);
     } catch (error) {
-      // console.error("Error fetching images:", error);
+      console.error("Error fetching images:", error);
       setImages([]);
     }
   };
 
-  const handleCreateFolder = async () => {
-    await axios.post("http://localhost:5000/api/folders", { name: folderName }, {
-      headers: { Authorization: localStorage.getItem("token") },
-    });
-    fetchFolders();
-  };
-
-
-  // ...existing code for useEffect, fetchFolders, fetchImages, handleCreateFolder...
-
-  const handleFileSelect = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
-
-  // const handleImageUpload = async (e) => {
-  //   e.preventDefault();
-  //   if (!selectedFile) return;
-
-  //   const formData = new FormData();
-  //   formData.append("image", selectedFile);
-  //   formData.append("name", imageName);
-  //   formData.append("folder", currentFolder);
-
-  //   try {
-  //     await axios.post("http://localhost:5000/api/images", formData, {
-  //       headers: {
-  //         Authorization: localStorage.getItem("token"),
-  //         "Content-Type": "multipart/form-data",
-  //       },
-  //     });
-  //     fetchImages();
-  //     setSelectedFile(null);
-  //     setImageName("");
-  //   } catch (error) {
-  //     alert(error.response?.data?.error || "Error uploading image");
-  //   }
-  // };
-
-  const handleImageUpload = async () => {
-    if (!imageFile) return alert("Please select an image!");
-
-    const formData = new FormData();
-    formData.append("name", imageName);
-    formData.append("image", imageFile);
-    formData.append("folder", currentFolderId || "root");
+  const handleCreateFolder = async (e) => {  // Add event parameter
+    e.preventDefault();  // Call preventDefault on the event object
+    if (!folderName) return alert("Please enter a folder name!");
 
     try {
-      const API = import.meta.env.VITE_API_URL;
-      await axios.post(`${API}/api/images`, formData, {
+      await axios.post("http://localhost:5000/api/folders",
+        { name: folderName },
+        { headers: { Authorization: localStorage.getItem("token") } }
+      );
+      setFolderName(""); // Clear input after successful creation
+      fetchFolders();
+    } catch (error) {
+      console.error("Error creating folder:", error);
+      alert("Failed to create folder");
+    }
+  };
+
+
+  const handleImageUpload = async (e) => {
+    e.preventDefault();
+    if (!selectedFile) return alert("Please select an image!");
+    if (!imageName.trim()) return alert("Please enter an image name!");
+
+    // Check file size (limit to 5MB)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB in bytes
+    if (selectedFile.size > MAX_FILE_SIZE) {
+      alert("File size should not exceed 5MB");
+      return;
+    }
+
+    // Check file type
+    if (!selectedFile.type.startsWith('image/')) {
+      alert("Please select a valid image file");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", selectedFile);
+    formData.append("name", imageName.trim());
+    formData.append("folder", currentFolder || "root");
+
+    try {
+      const response = await axios.post(`${API}/api/images`, formData, {
         headers: {
           Authorization: localStorage.getItem("token"),
-          "Content-Type": "multipart/form-data"
+          "Content-Type": "multipart/form-data",
+        },
+        // Add timeout and show upload progress
+        timeout: 30000,
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          console.log(`Upload Progress: ${percentCompleted}%`);
         },
       });
 
-      alert("Image uploaded successfully!");
-      fetchImages(); // Refresh images
+      if (response.data) {
+        // Clear form
+        setSelectedFile(null);
+        setImageName("");
+        const fileInput = document.querySelector('input[type="file"]');
+        if (fileInput) fileInput.value = '';
+
+        // Show success message
+        alert("Image uploaded successfully!");
+
+        // Refresh images
+        fetchImages(currentFolder);
+      }
     } catch (error) {
       console.error("Error uploading image:", error);
-      alert("Failed to upload image.");
+
+      // More specific error messages
+      if (error.response) {
+        switch (error.response.status) {
+          case 413:
+            alert("File size too large. Please choose a smaller file.");
+            break;
+          case 415:
+            alert("Unsupported file type. Please choose a valid image file.");
+            break;
+          case 500:
+            alert("Server error. Please try again later or contact support.");
+            break;
+          default:
+            alert(error.response.data?.message || "Failed to upload image");
+        }
+      } else if (error.code === 'ECONNABORTED') {
+        alert("Upload timed out. Please try again.");
+      } else {
+        alert("Network error. Please check your connection and try again.");
+      }
     }
+  };
+
+  // Add this function to validate file type and size before upload
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select a valid image file');
+      e.target.value = ''; // Reset input
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    if (file.size > MAX_FILE_SIZE) {
+      alert('File size should not exceed 5MB');
+      e.target.value = ''; // Reset input
+      return;
+    }
+
+    setSelectedFile(file);
   };
 
   const handleFolderClick = (folderId) => {
     setCurrentFolder(folderId);
-    // Fetch images for this folder
     fetchImages(folderId);
   };
+
 
 
 
@@ -204,23 +238,36 @@ const Dashboard = () => {
                 accept="image/*"
                 onChange={handleFileSelect}
                 className="block w-full text-sm text-gray-500
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-md file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-indigo-50 file:text-indigo-700
-                  hover:file:bg-indigo-100"
+        file:mr-4 file:py-2 file:px-4
+        file:rounded-md file:border-0
+        file:text-sm file:font-semibold
+        file:bg-indigo-50 file:text-indigo-700
+        hover:file:bg-indigo-100"
                 required
               />
+              {uploadProgress > 0 && uploadProgress < 100 && (
+                <div className="mt-2">
+                  <div className="bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-indigo-600 h-2.5 rounded-full"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-sm text-gray-600 mt-1">{uploadProgress}% uploaded</p>
+                </div>
+              )}
             </div>
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white px-6 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+              disabled={uploadProgress > 0 && uploadProgress < 100}
             >
-              Upload Image
+              {uploadProgress > 0 && uploadProgress < 100 ? 'Uploading...' : 'Upload Image'}
             </button>
           </form>
         </div>
 
+        {/* Folders Grid */}
         {/* Folders Grid with Click Handler */}
         <div className="mb-8">
           <h3 className="text-xl font-semibold mb-4">
@@ -258,25 +305,6 @@ const Dashboard = () => {
               ))}
           </div>
         </div>
-        {/* Folders Grid */}
-        {/* <div className="mb-8">
-          <h3 className="text-xl font-semibold mb-4 ">Your Folders</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 cursor-pointer">
-            {folders.map(folder => (
-              <div
-                key={folder._id}
-                className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow"
-              >
-                <div className="flex items-center space-x-2">
-                  <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                  </svg>
-                  <span className="font-medium">{folder.name}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div> */}
 
         {/* Images Grid */}
         <div>
@@ -285,9 +313,10 @@ const Dashboard = () => {
             {Array.isArray(images) && images.length > 0 ? (
               images.map((image) => (
                 <div key={image._id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
-                  {/* <img src={`http://localhost:5000/api/images/${image.url}`} alt={image.name} className="w-full h-48 object-cover rounded-md mb-2" /> */}
                   <img
-                    src={`http://localhost:5000/api/images/${image._id}`}
+                    src={`http://localhost:5000/api/images/${image.url}`}
+                    // src={`http://localhost:5000/api/images/${image._id}`}
+
                     alt={image.name}
                     className="w-full h-48 object-cover rounded-md mb-2"
                   />

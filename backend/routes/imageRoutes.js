@@ -7,11 +7,61 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// ✅ Configure Multer to Use Buffer Storage
+// ✅ Configure Multer for Buffer Storage (GridFS)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+const { name, folder } = req.body;
+//     const userId = req.user.id;
 
-// ✅ Upload Image to MongoDB GridFS
+//     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
+
+//     // ✅ Upload Image to GridFS
+//     const uploadStream = bucket.openUploadStream(req.file.originalname, {
+//       contentType: req.file.mimetype,
+//       metadata: { userId, folder },
+//     });
+
+//     uploadStream.end(req.file.buffer);
+
+//     uploadStream.on("finish", async () => {
+//       try {
+//         // ✅ Convert folder ID properly
+//         const folderId = 
+//         folder === "root" || !folder || !mongoose.Types.ObjectId.isValid(folder) 
+//         ? null 
+//         : new mongoose.Types.ObjectId(folder);
+      
+        
+
+        
+//         const newImage = new Image({
+//           name,
+//           url: uploadStream.id, // ✅ Store GridFS file ID
+//           folder: folderId,
+//           user: userId,
+//         });
+//         console.log("Folder ID before saving:", folderId);
+
+
+//         await newImage.save();
+//         res.status(201).json(newImage);
+//       } catch (error) {
+//         console.error("❌ Database Save Error:", error);
+//         res.status(500).json({ error: "Error saving image details" });
+//       }
+//     });
+
+//     uploadStream.on("error", (err) => {
+//       console.error("❌ GridFS Upload Error:", err);
+//       res.status(500).json({ error: "Error uploading file" });
+//     });
+
+//   } catch (err) {
+//     console.error("❌ Upload Error:", err);
+//     res.status(500).json({ error: err.message });
+//   }
+// });
+
 router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -20,83 +70,84 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
 
     const { name, folder } = req.body;
     const userId = req.user.id;
+
     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
 
-    // ✅ Upload Image to GridFS with explicit contentType
+    // ✅ Check if folder is valid before conversion
+    const folderId = 
+      folder === "root" || !folder || !mongoose.Types.ObjectId.isValid(folder) 
+      ? null 
+      : new mongoose.Types.ObjectId(folder);
+
+    console.log("Folder ID before saving:", folderId); // ✅ Debugging
+
+    // ✅ Upload Image to GridFS
     const uploadStream = bucket.openUploadStream(req.file.originalname, {
-      contentType: req.file.mimetype, // Ensure correct content type
-      metadata: { userId, folder },
+      contentType: req.file.mimetype,
+      metadata: { userId, folder: folderId },
     });
 
-    // ✅ Handle success and error listeners before calling `end()`
+    uploadStream.end(req.file.buffer);
+
     uploadStream.on("finish", async () => {
       try {
         const newImage = new Image({
           name,
           url: uploadStream.id, // ✅ Store GridFS file ID
-          folder,
+          folder: folderId,
           user: userId,
         });
 
         await newImage.save();
-        res.json(newImage);
+        res.status(201).json(newImage);
       } catch (error) {
-        console.error("Database Save Error:", error);
+        console.error("❌ Database Save Error:", error);
         res.status(500).json({ error: "Error saving image details" });
       }
     });
 
     uploadStream.on("error", (err) => {
-      console.error("GridFS Upload Error:", err);
+      console.error("❌ GridFS Upload Error:", err);
       res.status(500).json({ error: "Error uploading file" });
     });
 
-    // ✅ Upload file buffer after event listeners are set
-    uploadStream.end(req.file.buffer);
-
   } catch (err) {
-    console.error("Upload Error:", err);
+    console.error("❌ Upload Error:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-// ✅ Get a specific image by ID from GridFS
+
+
+
 router.get("/:id", async (req, res) => {
   try {
     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
-    const fileId = new mongoose.Types.ObjectId(req.params.id);
+    const fileId = new mongoose.Types.ObjectId(req.params.id); // Ensure correct ObjectId format
 
-    // ✅ Check if the file exists
     const files = await bucket.find({ _id: fileId }).toArray();
-    if (!files || files.length === 0) {
+    if (!files.length) {
       return res.status(404).json({ error: "File not found" });
     }
 
-    // ✅ Send the image as a response with correct content type
     res.set("Content-Type", files[0].contentType || "application/octet-stream");
     bucket.openDownloadStream(fileId).pipe(res);
-
   } catch (err) {
-    console.error("File Fetch Error:", err);
+    console.error("❌ File Fetch Error:", err);
     res.status(500).json({ error: err.message });
   }
 });
 
-router.get("/:id", async (req, res) => {
+
+router.get("/", authMiddleware, async (req, res) => {
   try {
-    const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
-
-    const fileId = new mongoose.Types.ObjectId(req.params.id);
-    const downloadStream = bucket.openDownloadStream(fileId);
-
-    res.set("Content-Type", "image/jpeg"); // Adjust content type if needed
-    downloadStream.pipe(res);
-  } catch (error) {
-    console.error("Error retrieving image:", error);
-    res.status(500).json({ error: "Failed to retrieve image" });
+    const images = await Image.find({ user: req.user.id });
+    res.json(images);
+  } catch (err) {
+    console.error("Error fetching images:", err);
+    res.status(500).json({ error: err.message });
   }
 });
 
 
 module.exports = router;
-
