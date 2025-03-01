@@ -61,20 +61,20 @@ const Dashboard = () => {
       const { data } = await axios.get(`${API}/api/images`, {
         headers: { Authorization: localStorage.getItem("token") },
       });
-  
+
       if (!Array.isArray(data)) {
-        console.error("Unexpected API response:", data);
+        // console.error("Unexpected API response:", data);
         setImages([]);
         return;
       }
-  
+
       setImages(data);
     } catch (error) {
-      console.error("Error fetching images:", error);
+      // console.error("Error fetching images:", error);
       setImages([]);
     }
   };
-  
+
   const handleCreateFolder = async () => {
     await axios.post("http://localhost:5000/api/folders", { name: folderName }, {
       headers: { Authorization: localStorage.getItem("token") },
@@ -115,21 +115,21 @@ const Dashboard = () => {
 
   const handleImageUpload = async () => {
     if (!imageFile) return alert("Please select an image!");
-  
+
     const formData = new FormData();
     formData.append("name", imageName);
     formData.append("image", imageFile);
     formData.append("folder", currentFolderId || "root");
-  
+
     try {
       const API = import.meta.env.VITE_API_URL;
       await axios.post(`${API}/api/images`, formData, {
-        headers: { 
+        headers: {
           Authorization: localStorage.getItem("token"),
           "Content-Type": "multipart/form-data"
         },
       });
-  
+
       alert("Image uploaded successfully!");
       fetchImages(); // Refresh images
     } catch (error) {
@@ -137,7 +137,7 @@ const Dashboard = () => {
       alert("Failed to upload image.");
     }
   };
-  
+
   const handleFolderClick = (folderId) => {
     setCurrentFolder(folderId);
     // Fetch images for this folder
@@ -285,7 +285,13 @@ const Dashboard = () => {
             {Array.isArray(images) && images.length > 0 ? (
               images.map((image) => (
                 <div key={image._id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow">
-                  <img src={`http://localhost:5000/api/images/${image.url}`} alt={image.name} className="w-full h-48 object-cover rounded-md mb-2" />
+                  {/* <img src={`http://localhost:5000/api/images/${image.url}`} alt={image.name} className="w-full h-48 object-cover rounded-md mb-2" /> */}
+                  <img
+                    src={`http://localhost:5000/api/images/${image._id}`}
+                    alt={image.name}
+                    className="w-full h-48 object-cover rounded-md mb-2"
+                  />
+
                   <p className="text-sm text-gray-600 truncate">{image.name}</p>
                 </div>
               ))
