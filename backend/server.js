@@ -6,24 +6,33 @@ import authRoutes from "./routes/authRoutes.js";
 import folderRoutes from "./routes/folderRoutes.js";
 import imageRoutes from "./routes/imageRoutes.js";
 
-
 dotenv.config();
 const app = express();
 
-app.use(cors(
-    {
-        origin: ['https://drive-like-frontend-8uug8y3vb-kaustubh-patils-projects-d98e276b.vercel.app',
-        'https://drive-like.vercel.app',],
-        methods: ['GET', 'POST'],
-        credentials: true,
-        allowedHeaders: ['Content-Type', 'Authorization']
-    }
-));
+// Updated CORS configuration
+app.use(cors({
+    origin: [
+        'https://drive-like-frontend.vercel.app',
+        'https://drive-like-frontend-8uug8y3vb-kaustubh-patils-projects-d98e276b.vercel.app',
+        'https://drive-like.vercel.app',
+        'http://localhost:5173'
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Type', 'Authorization']
+}));
+
+// Pre-flight requests
+app.options('*', cors());
+
 app.use(express.json());
 
+// Health check route
 app.get('/', (req, res) => {
     res.send('Server is running');
 });
+
 // routes
 app.use('/api/auth', authRoutes);
 app.use('/api/folders', folderRoutes);
