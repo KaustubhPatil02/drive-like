@@ -3,7 +3,7 @@ import axios from "axios";
 import useAuthStore from "../store/authStore";
 import ProfileModal from "./ProfileModal";
 
-const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
+// const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
 
 
@@ -50,7 +50,7 @@ const Dashboard = () => {
   // API Handlers
   const fetchFolders = async () => {
     try {
-      const { data } = await axios.get(`${API}/api/folders`, {
+      const { data } = await axios.get('https://drive-like-api.vercel.app/api/folders', {
         headers: { Authorization: localStorage.getItem("token") },
       });
       setFolders(Array.isArray(data) ? data : []);
@@ -62,7 +62,7 @@ const Dashboard = () => {
 
   const fetchImages = async (folderId = null) => {
     try {
-      const { data } = await axios.get(`${API}/api/images`, {
+      const { data } = await axios.get('https://drive-like-api.vercel.app/api/images', {
         headers: { Authorization: localStorage.getItem("token") },
       });
 
@@ -85,7 +85,7 @@ const Dashboard = () => {
     if (!name || !name.trim()) return;
 
     try {
-      await axios.post(`${API}/api/folders`,
+      await axios.post('https://drive-like-api.vercel.app/api/folders',
         {
           name: name.trim(),
           parentFolder: currentFolder
@@ -133,7 +133,7 @@ const Dashboard = () => {
     formData.append("folder", currentFolder || "root");
 
     try {
-      await axios.post(`${API}/api/images`, formData, {
+      await axios.post('https://drive-like-api.vercel.app/api/images', formData, {
         headers: {
           Authorization: localStorage.getItem("token"),
           "Content-Type": "multipart/form-data",
