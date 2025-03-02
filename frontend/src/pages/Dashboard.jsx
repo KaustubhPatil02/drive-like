@@ -472,9 +472,7 @@ const Dashboard = () => {
           </div>
         </div>
       ))}
-      {image.url && console.log("Image URL:", image.url)}
-<img src={`http://localhost:5000/api/images/${image.url}`} alt={image.name} />
-
+      
     </div>
   </div>
 )}
