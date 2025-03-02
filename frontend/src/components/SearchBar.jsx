@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-const SearchBar = ({ onFolderClick, onFileClick }) => {
+const Searchbar = ({ onFolderClick, onFileClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -111,4 +111,4 @@ const SearchBar = ({ onFolderClick, onFileClick }) => {
   );
 };
 
-export default SearchBar;
+export default Searchbar;

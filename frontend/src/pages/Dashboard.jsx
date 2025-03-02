@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuthStore from "../store/authStore";
 import ProfileModal from "./ProfileModal";
-import SearchBar from "../components/Searchbar";
+import Searchbar from "../components/Searchbar";
 
 // const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app/";
@@ -189,7 +189,7 @@ const Dashboard = () => {
           </div>
           <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex items-center">
           </div>
-          <SearchBar />
+          <Searchbar />
           <ProfileModal />
         </div>
 

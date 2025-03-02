@@ -10,7 +10,6 @@ const router = express.Router();
 // ✅ Configure Multer for Buffer Storage (GridFS)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-const { name, folder } = req.body;
 //     const userId = req.user.id;
 
 //     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
@@ -64,6 +63,7 @@ const { name, folder } = req.body;
 
 router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
+
     if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
