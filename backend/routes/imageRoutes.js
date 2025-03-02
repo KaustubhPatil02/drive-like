@@ -7,63 +7,12 @@ const authMiddleware = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-// ✅ Configure Multer for Buffer Storage (GridFS)
+// Configure Multer for Buffer Storage (GridFS)
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
-//     const userId = req.user.id;
-
-//     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
-
-//     // ✅ Upload Image to GridFS
-//     const uploadStream = bucket.openUploadStream(req.file.originalname, {
-//       contentType: req.file.mimetype,
-//       metadata: { userId, folder },
-//     });
-
-//     uploadStream.end(req.file.buffer);
-
-//     uploadStream.on("finish", async () => {
-//       try {
-//         // ✅ Convert folder ID properly
-//         const folderId = 
-//         folder === "root" || !folder || !mongoose.Types.ObjectId.isValid(folder) 
-//         ? null 
-//         : new mongoose.Types.ObjectId(folder);
-      
-        
-
-        
-//         const newImage = new Image({
-//           name,
-//           url: uploadStream.id, // ✅ Store GridFS file ID
-//           folder: folderId,
-//           user: userId,
-//         });
-//         console.log("Folder ID before saving:", folderId);
-
-
-//         await newImage.save();
-//         res.status(201).json(newImage);
-//       } catch (error) {
-//         console.error("❌ Database Save Error:", error);
-//         res.status(500).json({ error: "Error saving image details" });
-//       }
-//     });
-
-//     uploadStream.on("error", (err) => {
-//       console.error("❌ GridFS Upload Error:", err);
-//       res.status(500).json({ error: "Error uploading file" });
-//     });
-
-//   } catch (err) {
-//     console.error("❌ Upload Error:", err);
-//     res.status(500).json({ error: err.message });
-//   }
-// });
 
 router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   try {
-
     if (!req.file) {
       return res.status(400).json({ error: "No image uploaded" });
     }
@@ -73,15 +22,15 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
 
     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
 
-    // ✅ Check if folder is valid before conversion
+    // Check if folder is valid before conversion
     const folderId = 
       folder === "root" || !folder || !mongoose.Types.ObjectId.isValid(folder) 
       ? null 
       : new mongoose.Types.ObjectId(folder);
 
-    console.log("Folder ID before saving:", folderId); // ✅ Debugging
+    console.log("Folder ID before saving:", folderId); // Debugging
 
-    // ✅ Upload Image to GridFS
+    // Upload Image to GridFS
     const uploadStream = bucket.openUploadStream(req.file.originalname, {
       contentType: req.file.mimetype,
       metadata: { userId, folder: folderId },
@@ -93,7 +42,7 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
       try {
         const newImage = new Image({
           name,
-          url: uploadStream.id, // ✅ Store GridFS file ID
+          url: uploadStream.id, // Store GridFS file ID
           folder: folderId,
           user: userId,
         });
@@ -117,9 +66,6 @@ router.post("/", authMiddleware, upload.single("image"), async (req, res) => {
   }
 });
 
-
-
-
 router.get("/:id", async (req, res) => {
   try {
     const bucket = new GridFSBucket(mongoose.connection.db, { bucketName: "uploads" });
@@ -138,7 +84,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const images = await Image.find({ user: req.user.id });
@@ -148,6 +93,5 @@ router.get("/", authMiddleware, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
-
 
 module.exports = router;

@@ -52,7 +52,7 @@ app.use('/api/search', searchRoutes);
 
 // Database Connection & Server Start
 const PORT = process.env.PORT || 5000;
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     app.listen(PORT, () => {
       console.log(`✅ Backend server is running on port ${PORT}!`);
