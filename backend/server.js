@@ -9,44 +9,58 @@ import imageRoutes from "./routes/imageRoutes.js";
 dotenv.config();
 const app = express();
 
-// Updated CORS configuration
-app.use(cors({
-    origin: [
-        'https://drive-like-frontend.vercel.app',
-        'https://drive-like-frontend-8uug8y3vb-kaustubh-patils-projects-d98e276b.vercel.app',
-        'https://drive-like.vercel.app',
-        'http://localhost:5173'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Content-Type', 'Authorization']
-}));
+// CORS configuration (MUST be before any middleware)
+const allowedOrigins = [
+    'https://drive-like-frontend.vercel.app',
+    'https://drive-like-frontend-8uug8y3vb-kaustubh-patils-projects-d98e276b.vercel.app',
+    'https://drive-like.vercel.app',
+    'http://localhost:5173'
+];
 
-// Pre-flight requests
-app.options('*', cors());
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
 
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200); // Handle preflight request
+    }
+    next();
+});
+
+// Middleware
 app.use(express.json());
+
+// Debugging: Log incoming requests
+app.use((req, res, next) => {
+    console.log(`➡️ ${req.method} ${req.path}`);
+    console.log("Headers:", req.headers);
+    next();
+});
 
 // Health check route
 app.get('/', (req, res) => {
-    res.send('Server is running');
+    res.send('✅ Server is running');
 });
 
-// routes
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/folders', folderRoutes);
 app.use('/api/images', imageRoutes);
 
+// Database Connection & Server Start
 const PORT = process.env.PORT || 5000;
-
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         app.listen(PORT, () => {
             console.log(`✅ Backend server is running on port ${PORT}!`);
         });
     })
-    .catch(err => console.log(err));
+    .catch(err => console.log("❌ MongoDB Connection Error:", err));
 
-// Add this for Vercel
+// Export for Vercel deployment
 export default app;
