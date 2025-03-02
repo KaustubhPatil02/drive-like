@@ -19,17 +19,22 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-
+  
     try {
-      const { data } = await api.post("/api/auth/login", form);
-      if (data?.token) {
-        login(data.token);
+      const response = await api.post("/api/auth/login", form);
+      
+      if (response?.data?.token) {
+        login(response.data.token);
         navigate("/");
       } else {
         throw new Error("Invalid response from server");
       }
     } catch (error) {
-      setError(error.message);
+      setError(
+        error.response?.data?.error || 
+        error.message || 
+        "An error occurred during login"
+      );
       console.error("Login error:", error);
     } finally {
       setIsLoading(false);
