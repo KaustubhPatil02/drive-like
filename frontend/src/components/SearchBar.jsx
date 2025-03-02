@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+import api from '../utility/api';
 
 const Searchbar = ({ onFolderClick, onFileClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [error, setError] = useState(null);
   const searchRef = useRef(null);
 
   useEffect(() => {
@@ -23,10 +22,11 @@ const Searchbar = ({ onFolderClick, onFileClick }) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      if (searchQuery) {
+      if (searchQuery.trim()) {
         handleSearch();
       } else {
         setSearchResults([]);
+        setShowResults(false);
       }
     }, 300);
 
@@ -34,21 +34,40 @@ const Searchbar = ({ onFolderClick, onFileClick }) => {
   }, [searchQuery]);
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
+    const query = searchQuery.trim(); // Ensure query is defined
 
-    setIsSearching(true);
+    if (!query) return; // Prevent unnecessary API calls
+
     try {
-      const { data } = await axios.get(`${API}/api/search?q=${searchQuery}`, {
-        headers: { Authorization: localStorage.getItem("token") },
-      });
-      setSearchResults(data);
-      setShowResults(true);
+        const token = localStorage.getItem("token");
+        if (!token) {
+            throw new Error("User not authenticated");
+        }
+
+        const response = await fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
+            credentials: "include"
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || "Search failed");
+        }
+
+        const data = await response.json();
+        setSearchResults(data); // Store results
+        setShowResults(true); // Show results
     } catch (error) {
-    //   console.error('Search error:', error);
-    } finally {
-      setIsSearching(false);
+        console.error("Search error:", error);
+        setError(error.message);
     }
-  };
+};
+
+
 
   return (
     <div className="relative flex-1 max-w-2xl mx-4" ref={searchRef}>
@@ -75,7 +94,7 @@ const Searchbar = ({ onFolderClick, onFileClick }) => {
       </div>
 
       {/* Search Results Dropdown */}
-      {showResults && searchResults.length > 0 && (
+      {(showResults && searchResults.length > 0) && (
         <div className="absolute mt-1 w-full bg-white rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
           <div className="py-1">
             {searchResults.map((item) => (
@@ -83,9 +102,9 @@ const Searchbar = ({ onFolderClick, onFileClick }) => {
                 key={item._id}
                 onClick={() => {
                   if (item.type === 'folder') {
-                    onFolderClick(item._id);
+                    onFolderClick?.(item._id);
                   } else {
-                    onFileClick(item._id);
+                    onFileClick?.(item._id);
                   }
                   setShowResults(false);
                   setSearchQuery('');
@@ -105,6 +124,12 @@ const Searchbar = ({ onFolderClick, onFileClick }) => {
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {error && (
+        <div className="absolute mt-1 w-full bg-red-50 text-red-600 text-sm p-2 rounded-md">
+          {error}
         </div>
       )}
     </div>

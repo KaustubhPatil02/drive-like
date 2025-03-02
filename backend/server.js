@@ -5,7 +5,7 @@ import cors from 'cors';
 import authRoutes from "./routes/authRoutes.js";
 import folderRoutes from "./routes/folderRoutes.js";
 import imageRoutes from "./routes/imageRoutes.js";
-
+import searchRoutes from "./routes/searchRoutes.js";
 dotenv.config();
 const app = express();
 
@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/folders', folderRoutes);
 app.use('/api/images', imageRoutes);
-
+app.use('/api/search', searchRoutes);
 // Database Connection & Server Start
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.MONGO_URI)

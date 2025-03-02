@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuthStore from "../store/authStore";
 import ProfileModal from "./ProfileModal";
-import Searchbar from "../components/SearchBar";
 
-// const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
-const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app/";
+const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
 
 
 const Dashboard = () => {
@@ -172,28 +171,27 @@ const Dashboard = () => {
 
   // Render Component
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <nav className="bg-white shadow-sm border-b">
-        <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsMobileMenuOpen(true)}
-              className="md:hidden text-gray-600 hover:text-gray-900"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-            <h1 className="text-xl font-medium text-gray-800">Drive-Clone</h1>
-          </div>
-          <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex items-center">
-          </div>
-          <Searchbar />
-          <ProfileModal />
-        </div>
-
-      </nav>
+    <div className="min-h-screen bg-white pt-[64px]"> {/* Added pt-[64px] for navbar height */}
+  {/* Fixed Header */}
+  <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b">
+    <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
+      <div className="flex items-center space-x-4">
+        <button
+          onClick={() => setIsMobileMenuOpen(true)}
+          className="md:hidden text-gray-600 hover:text-gray-900"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <h1 className="text-xl font-medium text-gray-800">Drive-Clone</h1>
+      </div>
+      <div className="flex items-center space-x-4">
+        {/* <Searchbar /> */}
+        <ProfileModal />
+      </div>
+    </div>
+  </nav>
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
