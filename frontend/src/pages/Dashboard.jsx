@@ -461,7 +461,7 @@ const Dashboard = () => {
           {/* Image Container */}
           <div className="w-full h-32 relative">
             <img
-              src={`${API}/api/images/${image.url}`}
+              src={'https://drive-like-api.vercel.app/api/images/${image.url}'}
               alt={image.name}
               className="w-full h-full object-cover rounded-t-lg"
             />
