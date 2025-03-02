@@ -4,7 +4,9 @@ import useAuthStore from "../store/authStore";
 import ProfileModal from "./ProfileModal";
 import SearchBar from "../components/Searchbar";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+// const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app/";
+
 
 const Dashboard = () => {
   // State Management
