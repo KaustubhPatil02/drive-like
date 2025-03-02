@@ -19,62 +19,85 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Create your account
-          </h2>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+      <div className="max-w-[450px] w-full space-y-8 p-8">
+        <div className="flex flex-col items-center">
+        <h2 className="text-3xl font-bold text-blue-600">Drive-Clone</h2>
+         
+          <h1 className="text-2xl font-normal text-gray-900">Create your Drive-Clone account</h1>
+          <p className="mt-3 text-gray-600">to continue to Drive-Clone</p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <input
-                type="text"
-                name="username"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
-                onChange={handleChange}
-              />
+        
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          <div className="bg-white rounded-lg border border-gray-300 p-8 shadow-sm hover:shadow-md transition-shadow">
+            <div className="space-y-6">
+              <div>
+                <input
+                  type="text"
+                  name="username"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  placeholder="Username"
+                  onChange={handleChange}
+                  autoComplete="username"
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  placeholder="Email"
+                  onChange={handleChange}
+                  autoComplete="email"
+                />
+              </div>
+              <div>
+                <input
+                  type="password"
+                  name="password"
+                  required
+                  className="block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  placeholder="Password"
+                  onChange={handleChange}
+                  autoComplete="new-password"
+                />
+                <p className="mt-2 text-xs text-gray-500">
+                  Use 8 or more characters with a mix of letters, numbers & symbols
+                </p>
+              </div>
             </div>
-            <div>
-              <input
-                type="email"
-                name="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Email address"
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <input
-                type="password"
-                name="password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Password"
-                onChange={handleChange}
-              />
-            </div>
-          </div>
 
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              Register
-            </button>
-          </div>
-          
-          <div className="text-sm text-center">
-            <Link to="/login" className="font-medium text-indigo-600 hover:text-indigo-500">
-              Already have an account? Sign in
-            </Link>
+            <div className="flex items-center justify-between mt-8">
+              <Link 
+                to="/login" 
+                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Sign in instead
+              </Link>
+              <button
+                type="submit"
+                className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Create account
+              </button>
+            </div>
           </div>
         </form>
+
+        <div className="mt-6 text-center text-sm text-gray-600">
+          <p>
+            By creating an account, you agree to Drive's{' '}
+            <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+              Terms of Service
+            </a>{' '}
+            and{' '}
+            <a href="#" className="text-blue-600 hover:text-blue-800 font-medium">
+              Privacy Policy
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
