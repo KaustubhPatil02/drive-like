@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
 import axios from "axios";
-import api from "../utility/api";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
