@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import useAuthStore from "../store/authStore";
+import axios from "axios";
 import api from "../utility/api";
 
 const Login = () => {
@@ -13,7 +14,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/api/auth/login", form);
+      const response = await axios.post("https://drive-like-api.vercel.app/api/auth/login", form);
       if (response?.data?.token) {
         login(response.data.token);
         navigate("/");
