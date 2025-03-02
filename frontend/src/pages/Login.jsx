@@ -13,11 +13,16 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await api.post("/api/auth/login", form);
-      login(data.token);
-      navigate("/");
+      const response = await api.post("/api/auth/login", form);
+      if (response?.data?.token) {
+        login(response.data.token);
+        navigate("/");
+      } else {
+        throw new Error('Invalid response from server');
+      }
     } catch (error) {
-      alert(error.response.data.error);
+      console.error('Login error:', error);
+      alert(error.message || 'Login failed');
     }
   };
 
