@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../utility/api";
 import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
@@ -11,7 +11,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("https://drive-like.vercel.app/api/auth/register", form);
+      await api.post("/api/auth/register", form);
       navigate("/login");
     } catch (error) {
       alert(error.response.data.error);

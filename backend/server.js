@@ -12,9 +12,7 @@ const app = express();
 // CORS configuration (MUST be before any middleware)
 const allowedOrigins = [
     'https://drive-like-frontend.vercel.app',
-    'https://drive-like-frontend-8uug8y3vb-kaustubh-patils-projects-d98e276b.vercel.app',
-    'https://drive-like.vercel.app',
-    'http://localhost:5173'
+  'http://localhost:5173'
 ];
 
 app.use((req, res, next) => {
