@@ -15,33 +15,39 @@ const allowedOrigins = [
   'http://localhost:5173'
 ];
 
-app.use((req, res, next) => {
-    const origin = req.headers.origin;
-    if (allowedOrigins.includes(origin)) {
-        res.header("Access-Control-Allow-Origin", origin);
-    }
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
+// app.use((req, res, next) => {
+//     const origin = req.headers.origin;
+//     if (allowedOrigins.includes(origin)) {
+//         res.header("Access-Control-Allow-Origin", origin);
+//     }
+//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//     res.header("Access-Control-Allow-Credentials", "true");
 
-    if (req.method === "OPTIONS") {
-        return res.sendStatus(200); // Handle preflight request
-    }
-    next();
-});
+//     if (req.method === "OPTIONS") {
+//         return res.sendStatus(200); // Handle preflight request
+//     }
+//     next();
+// });
+// app.use(cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error('Not allowed by CORS'));
+//       }
+//     },
+//     methods: "GET, POST, PUT, DELETE, OPTIONS",
+//     allowedHeaders: "Content-Type, Authorization",
+//     credentials: true
+//   }));
 app.use(cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-    methods: "GET, POST, PUT, DELETE, OPTIONS",
-    allowedHeaders: "Content-Type, Authorization",
-    credentials: true
-  }));
-  
+  origin: allowedOrigins,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
 // Middleware
 app.use(express.json());
 
