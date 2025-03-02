@@ -3,7 +3,7 @@ import axios from "axios";
 import useAuthStore from "../store/authStore";
 import ProfileModal from "./ProfileModal";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
 
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000',
+  baseURL: import.meta.env.VITE_API_URL || 'https://drive-like-api.vercel.app',
   timeout: 60000, // Increased timeout to 60 seconds
   headers: {
     'Content-Type': 'application/json',
