@@ -5,6 +5,7 @@ import Files from "../components/Files";
 import FileUploadModal from "../components/FileUploadModal";
 import CreateFolderModal from "../components/CreateFolderModal";
 import ProfileModal from "../pages/ProfileModal"
+import SearchBox from "../components/SearchBox";
 
 // const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
@@ -192,6 +193,9 @@ const Dashboard = () => {
             <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
+            <SearchBox 
+              
+            />
              <ProfileModal /> 
              
           </div>
@@ -210,7 +214,7 @@ const Dashboard = () => {
           <div className="fixed inset-y-0 left-0 flex flex-col w-72 bg-white">
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b">
-              <h2 className="text-lg font-medium text-gray-900">Drive-Clone</h2>
+            <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-gray-500 hover:text-gray-700"

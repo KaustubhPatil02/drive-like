@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const SearchBar = ({ onFolderClick, onFileClick }) => {
+const SearchBox = ({ onFolderClick, onFileClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -31,49 +31,43 @@ const SearchBar = ({ onFolderClick, onFileClick }) => {
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
 
-  // const handleSearch = async () => {
-  //   const query = searchQuery.trim(); // Ensure query is defined
+  const handleSearch = async () => {
+    const query = searchQuery.trim(); // Ensure query is defined
   
-  //   if (!query) return; // Prevent unnecessary API calls
+    if (!query) return; // Prevent unnecessary API calls
   
-  //   try {
-  //     const token = localStorage.getItem("token");
-  //     if (!token) {
-  //       throw new Error("User not authenticated");
-  //     }
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
   
-  //     const response = await fetch(`https://drive-like-api.vercel.app/api/search?q=${encodeURIComponent(query)}`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": `Bearer ${token}`
-  //       },
-  //       credentials: "include"
-  //     });
+      const response = await fetch(`https://drive-like-api.vercel.app/api/search?q=${encodeURIComponent(query)}`, {
+        method: "GET",
+        headers: { Authorization: localStorage.getItem("token") },
+      });
   
-  //     if (!response.ok) {
-  //       const errorData = await response.json();
-  //       console.error("Search error response:", errorData);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Search error response:", errorData);
   
-  //       if (errorData.error === "Invalid Token") {
-  //         localStorage.removeItem("token");
-  //         alert("Your session has expired. Please log in again.");
-  //         // Redirect to login page or show login modal
-  //       }
+        if (errorData.error === "Invalid Token") {
+          localStorage.removeItem("token");
+          alert("Your session has expired. Please log in again.");
+          // Redirect to login page or show login modal
+        }
   
-  //       throw new Error(errorData.message || "Search failed");
-  //     }
+        throw new Error(errorData.message || "Search failed");
+      }
   
-  //     const data = await response.json();
-  //     setSearchResults(data); // Store results
-  //     setShowResults(true); // Show results
-  //   } catch (error) {
-  //     console.error("Search error:", error);
-  //     setError(error.message);
-  //   }
-  // };
-
-
+      const data = await response.json();
+      setSearchResults(data); // Store results
+      setShowResults(true); // Show results
+    } catch (error) {
+      console.error("Search error:", error);
+      setError(error.message);
+    }
+  };
 
   return (
     <div className="relative flex-1 max-w-2xl mx-4" ref={searchRef}>
@@ -100,7 +94,7 @@ const SearchBar = ({ onFolderClick, onFileClick }) => {
       </div>
 
       {/* Search Results Dropdown */}
-      {/* {(showResults && searchResults.length > 0) && (
+      {(showResults && searchResults.length > 0) && (
         <div className="absolute mt-1 w-full bg-white rounded-md shadow-lg z-50 max-h-96 overflow-y-auto">
           <div className="py-1">
             {searchResults.map((item) => (
@@ -131,7 +125,7 @@ const SearchBar = ({ onFolderClick, onFileClick }) => {
             ))}
           </div>
         </div>
-      )} */}
+      )}
 
       {error && (
         <div className="absolute mt-1 w-full bg-red-50 text-red-600 text-sm p-2 rounded-md">
@@ -142,4 +136,4 @@ const SearchBar = ({ onFolderClick, onFileClick }) => {
   );
 };
 
-export default SearchBar;
+export default SearchBox;
