@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const SearchBox = ({ onFolderClick, onFileClick }) => {
+const SearchBar = ({ onFolderClick, onFileClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -142,4 +142,4 @@ const SearchBox = ({ onFolderClick, onFileClick }) => {
   );
 };
 
-export default SearchBox;
+export default SearchBar;

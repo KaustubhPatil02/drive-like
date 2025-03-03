@@ -5,8 +5,7 @@ import Files from "../components/Files";
 import FileUploadModal from "../components/FileUploadModal";
 import CreateFolderModal from "../components/CreateFolderModal";
 import ProfileModal from "../pages/ProfileModal"
-import SearchBox from "../components/SearchBox";
-
+import { jwtDecode } from "jwt-decode";
 // const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
 
@@ -26,7 +25,6 @@ const Dashboard = () => {
   const [folderPath, setFolderPath] = useState([]);
   const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
 
-  // Initial Data Fetch
   useEffect(() => {
     fetchFolders();
     fetchImages();
@@ -54,9 +52,25 @@ const Dashboard = () => {
 
   // API Handlers
   const fetchFolders = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found. Please log in again.");
+      return;
+    }
+
+    // Decode the token to check its expiry
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000; // Current time in seconds
+
+    if (decodedToken.exp < currentTime) {
+      localStorage.removeItem("token");
+      console.error("Token expired. Please log in again.");
+      return;
+    }
+
     try {
       const { data } = await axios.get('https://drive-like-api.vercel.app/api/folders', {
-        headers: { Authorization: localStorage.getItem("token") },
+        headers: { Authorization: `Bearer ${token}` },
       });
       setFolders(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -66,12 +80,26 @@ const Dashboard = () => {
   };
 
   const fetchImages = async (folderId = null) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error("No token found. Please log in again.");
+      return;
+    }
+
+    // Decode the token to check its expiry
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000; // Current time in seconds
+
+    if (decodedToken.exp < currentTime) {
+      localStorage.removeItem("token");
+      console.error("Token expired. Please log in again.");
+      return;
+    }
+
     try {
       const { data } = await axios.get('https://drive-like-api.vercel.app/api/images', {
-        headers: { Authorization: localStorage.getItem("token") },
+        headers: { Authorization: `Bearer ${token}` },
       });
-      // console.log(images); // Make sure all uploaded images exist in this array
-
 
       if (!Array.isArray(data)) {
         setImages([]);
@@ -81,7 +109,7 @@ const Dashboard = () => {
       const filteredImages = folderId ? data.filter(img => img.folder === folderId) : data;
       setImages(filteredImages);
     } catch (error) {
-      // console.error("Error fetching images:", error);
+      console.error("Error fetching images:", error);
       setImages([]);
     }
   };
@@ -89,14 +117,14 @@ const Dashboard = () => {
   // Event Handlers
   const handleCreateFolder = async (name) => {
     if (!name || !name.trim()) return;
-  
+
     try {
       await axios.post('https://drive-like-api.vercel.app/api/folders',
         {
           name: name.trim(),
           parentFolder: currentFolder
         },
-        { headers: { Authorization: localStorage.getItem("token") } }
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
       fetchFolders();
       setShowNewOptions(false);
@@ -141,7 +169,7 @@ const Dashboard = () => {
     try {
       await axios.post('https://drive-like-api.vercel.app/api/images', formData, {
         headers: {
-          Authorization: localStorage.getItem("token"),
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "multipart/form-data",
         },
         onUploadProgress: (progressEvent) => {
@@ -159,7 +187,7 @@ const Dashboard = () => {
       fetchImages(currentFolder);
       alert("Image uploaded successfully!");
     } catch (error) {
-      // console.error("Error uploading image:", error);
+      console.error("Error uploading image:", error);
       setUploadProgress(0);
       alert(error.response?.data?.message || "Upload failed");
     }
@@ -174,6 +202,7 @@ const Dashboard = () => {
     setCurrentFolder(folderId);
     fetchImages(folderId);
   };
+
 
   // Render Component
   return (
@@ -193,7 +222,6 @@ const Dashboard = () => {
             <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <SearchBox/>
              <ProfileModal /> 
              
           </div>
