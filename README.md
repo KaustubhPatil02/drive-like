@@ -4,7 +4,7 @@ Create a web application where users can register, create folders, upload images
 1. [Features;](#features-to-implement)
 2. [Tech Stack:](#tech-stack)
 3. [Additional Requirements:](#additional-requirements)
-4. [Email & Password:](#email--password-for-logging-in)
+4. [Login credentials ](#email--password-for-logging-in)
 
 
 ### Features to Implement:
