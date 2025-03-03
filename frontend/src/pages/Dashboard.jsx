@@ -50,7 +50,7 @@ const Dashboard = () => {
   // API Handlers
   const fetchFolders = async () => {
     try {
-      const { data } = await axios.get('https://drive-like-api.vercel.app/api/folders', {
+      const { data } = await axios.get('https://drive-like.vercel.app/api/folders', {
         headers: { Authorization: localStorage.getItem("token") },
       });
       setFolders(Array.isArray(data) ? data : []);
@@ -460,11 +460,12 @@ const Dashboard = () => {
         >
           {/* Image Container */}
           <div className="w-full h-32 relative">
-            <img
-              src={'https://drive-like-api.vercel.app/api/images/${image.url}'}
-              alt={image.name}
-              className="w-full h-full object-cover rounded-t-lg"
-            />
+          <img
+  src={`https://drive-like-api.vercel.app/api/images/${image.url}`}
+  alt={image.name}
+  className="w-full h-full object-cover rounded-t-lg"
+/>
+
           </div>
           {/* Image Name */}
           <div className="p-2">
