@@ -193,7 +193,7 @@ const Dashboard = () => {
             <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <SearchBar />
+            <SearchBar/>
              <ProfileModal /> 
              
           </div>
