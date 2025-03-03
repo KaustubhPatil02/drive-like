@@ -140,8 +140,7 @@ const Dashboard = () => {
     try {
       await axios.post('https://drive-like-api.vercel.app/api/images', formData, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "Content-Type": "multipart/form-data",
+          Authorization: localStorage.getItem("token")
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
@@ -194,7 +193,7 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center space-x-4">
             <SearchBox 
-              
+              onFolderClick={handleFolderClick}
             />
              <ProfileModal /> 
              
