@@ -5,7 +5,7 @@ import Files from "../components/Files";
 import FileUploadModal from "../components/FileUploadModal";
 import CreateFolderModal from "../components/CreateFolderModal";
 import ProfileModal from "../pages/ProfileModal"
-import { jwtDecode } from "jwt-decode";
+
 // const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
 
@@ -52,25 +52,9 @@ const Dashboard = () => {
 
   // API Handlers
   const fetchFolders = async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found. Please log in again.");
-      return;
-    }
-
-    // Decode the token to check its expiry
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000; // Current time in seconds
-
-    if (decodedToken.exp < currentTime) {
-      localStorage.removeItem("token");
-      console.error("Token expired. Please log in again.");
-      return;
-    }
-
     try {
       const { data } = await axios.get('https://drive-like-api.vercel.app/api/folders', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: localStorage.getItem("token") },
       });
       setFolders(Array.isArray(data) ? data : []);
     } catch (error) {
@@ -80,26 +64,12 @@ const Dashboard = () => {
   };
 
   const fetchImages = async (folderId = null) => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      console.error("No token found. Please log in again.");
-      return;
-    }
-
-    // Decode the token to check its expiry
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000; // Current time in seconds
-
-    if (decodedToken.exp < currentTime) {
-      localStorage.removeItem("token");
-      console.error("Token expired. Please log in again.");
-      return;
-    }
-
     try {
       const { data } = await axios.get('https://drive-like-api.vercel.app/api/images', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: localStorage.getItem("token") },
       });
+      // console.log(images); // Make sure all uploaded images exist in this array
+
 
       if (!Array.isArray(data)) {
         setImages([]);
@@ -109,7 +79,7 @@ const Dashboard = () => {
       const filteredImages = folderId ? data.filter(img => img.folder === folderId) : data;
       setImages(filteredImages);
     } catch (error) {
-      console.error("Error fetching images:", error);
+      // console.error("Error fetching images:", error);
       setImages([]);
     }
   };
@@ -124,12 +94,12 @@ const Dashboard = () => {
           name: name.trim(),
           parentFolder: currentFolder
         },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
+        { headers: { Authorization: localStorage.getItem("token") } }
       );
       fetchFolders();
       setShowNewOptions(false);
-      setShowCreateFolderModal(false); // Close the modal
     } catch (error) {
+      // console.error("Error creating folder:", error);
       alert(error.response?.data?.message || "Failed to create folder");
     }
   };
