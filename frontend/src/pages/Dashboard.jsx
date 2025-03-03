@@ -5,7 +5,7 @@ import Files from "../components/Files";
 import FileUploadModal from "../components/FileUploadModal";
 import CreateFolderModal from "../components/CreateFolderModal";
 import ProfileModal from "../pages/ProfileModal"
-import SearchBar from "../components/Searchbar";
+import SearchBox from "../components/SearchBox";
 
 // const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
@@ -193,7 +193,7 @@ const Dashboard = () => {
             <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <SearchBar/>
+            <SearchBox/>
              <ProfileModal /> 
              
           </div>
