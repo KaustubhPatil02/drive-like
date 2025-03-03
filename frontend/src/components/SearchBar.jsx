@@ -28,7 +28,6 @@ const SearchBar = ({ onFolderClick, onFileClick }) => {
         setShowResults(false);
       }
     }, 300);
-
     return () => clearTimeout(delayDebounceFn);
   }, [searchQuery]);
 
