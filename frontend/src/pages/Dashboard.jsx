@@ -65,6 +65,8 @@ const Dashboard = () => {
       const { data } = await axios.get('https://drive-like-api.vercel.app/api/images', {
         headers: { Authorization: localStorage.getItem("token") },
       });
+      // console.log(images); // Make sure all uploaded images exist in this array
+
 
       if (!Array.isArray(data)) {
         setImages([]);
@@ -74,7 +76,7 @@ const Dashboard = () => {
       const filteredImages = folderId ? data.filter(img => img.folder === folderId) : data;
       setImages(filteredImages);
     } catch (error) {
-      console.error("Error fetching images:", error);
+      // console.error("Error fetching images:", error);
       setImages([]);
     }
   };
@@ -95,7 +97,7 @@ const Dashboard = () => {
       fetchFolders();
       setShowNewOptions(false);
     } catch (error) {
-      console.error("Error creating folder:", error);
+      // console.error("Error creating folder:", error);
       alert(error.response?.data?.message || "Failed to create folder");
     }
   };
@@ -153,7 +155,7 @@ const Dashboard = () => {
       fetchImages(currentFolder);
       alert("Image uploaded successfully!");
     } catch (error) {
-      console.error("Error uploading image:", error);
+      // console.error("Error uploading image:", error);
       setUploadProgress(0);
       alert(error.response?.data?.message || "Upload failed");
     }

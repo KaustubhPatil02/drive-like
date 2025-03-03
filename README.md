@@ -5,8 +5,8 @@ Create a web application where users can register, create folders, upload images
 1. Signup ✅
 2. Login  ✅
 3. Logout ✅
-4. Create Nested Folders
-5. Upload Image  :Required fields: Name, Image
+4. Create Nested Folders ✅
+5. Upload Image  :Required fields: Name, Image ✅
 6. User-Specific Access: Users can only see the folders and images they have uploaded. ✅
 7. Search Images: Users can perform search operations only on their images.
 
