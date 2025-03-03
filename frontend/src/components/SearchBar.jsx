@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import api from '../utility/api';
 
 const Searchbar = ({ onFolderClick, onFileClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,37 +34,45 @@ const Searchbar = ({ onFolderClick, onFileClick }) => {
 
   const handleSearch = async () => {
     const query = searchQuery.trim(); // Ensure query is defined
-
+  
     if (!query) return; // Prevent unnecessary API calls
-
+  
     try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-            throw new Error("User not authenticated");
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("User not authenticated");
+      }
+  
+      const response = await fetch(`https://drive-like-api.vercel.app/api/search?q=${encodeURIComponent(query)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        credentials: "include"
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error("Search error response:", errorData);
+  
+        if (errorData.error === "Invalid Token") {
+          localStorage.removeItem("token");
+          alert("Your session has expired. Please log in again.");
+          // Redirect to login page or show login modal
         }
-
-        const response = await fetch(`http://localhost:5000/api/search?q=${encodeURIComponent(query)}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            credentials: "include"
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || "Search failed");
-        }
-
-        const data = await response.json();
-        setSearchResults(data); // Store results
-        setShowResults(true); // Show results
+  
+        throw new Error(errorData.message || "Search failed");
+      }
+  
+      const data = await response.json();
+      setSearchResults(data); // Store results
+      setShowResults(true); // Show results
     } catch (error) {
-        console.error("Search error:", error);
-        setError(error.message);
+      console.error("Search error:", error);
+      setError(error.message);
     }
-};
+  };
 
 
 

@@ -6,18 +6,14 @@ const ProfileModal = () => {
     
   return (
     <div className="flex items-center space-x-4">
-      <button
-        onClick={() => setIsProfileOpen(true)}
-        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
-      >
-        <div className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center">
+     
+        <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center border-2 border-blue-500 text-blue-500 font-medium">
           <span className="text-sm font-medium text-blue-600">
             {user?.username ? user.username.charAt(0).toUpperCase() : 'U'}
           </span>
         </div>
-      </button>
       <div className="flex items-center space-x-4">
-        <span className="hidden md:inline text-gray-600">Welcome, {user.username}</span>
+        <span className="hidden md:inline text-gray-800 font-medium">Welcome, {user.username}</span>
         <button
           onClick={logout}
           className="flex items-center space-x-2 text-gray-100 font-medium px-4 py-2 rounded-md bg-red-500 hover:bg-red-200 transition-colors"
@@ -38,6 +34,7 @@ const ProfileModal = () => {
           </svg>
         </button>
       </div>
+     
     </div>
   )
 }

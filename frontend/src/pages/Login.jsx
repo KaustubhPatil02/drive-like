@@ -13,7 +13,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/login", form);
+      const response = await axios.post("https://drive-like-api.vercel.app/api/auth/login", form);
       if (response?.data?.token) {
         login(response.data.token);
         navigate("/");

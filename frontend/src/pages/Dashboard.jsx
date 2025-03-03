@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import useAuthStore from "../store/authStore";
-import ProfileModal from "./ProfileModal";
+import Files from "../components/Files";
+import FileUploadModal from "../components/FileUploadModal";
+import CreateFolderModal from "../components/CreateFolderModal";
+import ProfileModal from "../pages/ProfileModal"
 
 // const API = import.meta.env.VITE_API_URL ||'https://drive-like-api.vercel.app';
 // const API = import.meta.env.VITE_API_URL || "https://drive-like.vercel.app//";
@@ -20,6 +23,7 @@ const Dashboard = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [folderPath, setFolderPath] = useState([]);
+  const [showCreateFolderModal, setShowCreateFolderModal] = useState(false);
 
   // Initial Data Fetch
   useEffect(() => {
@@ -50,7 +54,7 @@ const Dashboard = () => {
   // API Handlers
   const fetchFolders = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/folders', {
+      const { data } = await axios.get('https://drive-like-api.vercel.app/api/folders', {
         headers: { Authorization: localStorage.getItem("token") },
       });
       setFolders(Array.isArray(data) ? data : []);
@@ -82,10 +86,9 @@ const Dashboard = () => {
   };
 
   // Event Handlers
-  const handleCreateFolder = async () => {
-    const name = prompt("Enter folder name:");
+  const handleCreateFolder = async (name) => {
     if (!name || !name.trim()) return;
-
+  
     try {
       await axios.post('https://drive-like-api.vercel.app/api/folders',
         {
@@ -96,8 +99,8 @@ const Dashboard = () => {
       );
       fetchFolders();
       setShowNewOptions(false);
+      setShowCreateFolderModal(false); // Close the modal
     } catch (error) {
-      // console.error("Error creating folder:", error);
       alert(error.response?.data?.message || "Failed to create folder");
     }
   };
@@ -106,7 +109,7 @@ const Dashboard = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const MAX_FILE_SIZE = 5 * 1024 * 1024;
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
     if (!file.type.startsWith('image/')) {
       alert('Please select a valid image file');
@@ -186,11 +189,12 @@ const Dashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <h1 className="text-xl font-medium text-gray-800">Drive-Clone</h1>
+            <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
             {/* <Searchbar /> */}
-            <ProfileModal />
+             <ProfileModal /> 
+             
           </div>
         </div>
       </nav>
@@ -243,7 +247,7 @@ const Dashboard = () => {
                     <div className="py-1">
                       <button
                         onClick={() => {
-                          handleCreateFolder();
+                          setShowCreateFolderModal(true);
                           setShowNewOptions(false);
                           setIsMobileMenuOpen(false);
                         }}
@@ -341,7 +345,7 @@ const Dashboard = () => {
                 <div className="absolute left-0 mt-1 w-60 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 py-1">
                   {/* New Folder Option */}
                   <button
-                    onClick={handleCreateFolder}
+                    onClick={()=> setShowCreateFolderModal(true)}
                     className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
                   >
                     <div className="flex items-center justify-center">
@@ -354,6 +358,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </button>
+                  
 
                   {/* File Upload Option */}
                   <button
@@ -451,34 +456,12 @@ const Dashboard = () => {
           )}
 
           {/* Images Grid */}
-          {images.length > 0 && (
-            <div>
-              <h3 className="text-sm font-medium text-gray-500 mb-4">Files</h3>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {images.map((image) => (
-                  <div
-                    key={image._id}
-                    className="group relative bg-white rounded-lg border hover:shadow-md transition-all overflow-hidden"
-                  >
-                    {/* Image Container */}
-                    <div className="w-full h-32 relative">
-                      <img
-                        src={`https://drive-like-api.vercel.app/api/images/${image.url}`}
-                        alt={image.name}
-                        className="w-full h-full object-cover rounded-t-lg"
-                      />
-
-                    </div>
-                    {/* Image Name */}
-                    <div className="p-2">
-                      <p className="text-sm text-gray-700 truncate">{image.name}</p>
-                    </div>
-                  </div>
-                ))}
-
-              </div>
-            </div>
-          )}
+          <Files images={images} />
+          <CreateFolderModal
+  showCreateFolderModal={showCreateFolderModal}
+  setShowCreateFolderModal={setShowCreateFolderModal}
+  handleCreateFolder={handleCreateFolder}
+/>
 
 
           {/* Empty State */}
@@ -495,95 +478,18 @@ const Dashboard = () => {
       </div>
 
       {/* Upload Modal */}
-      {showUploadModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">Upload File</h3>
-              <button
-                onClick={() => {
-                  setShowUploadModal(false);
-                  setSelectedFile(null);
-                  setImageName('');
-                  setUploadProgress(0);
-                }}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <form onSubmit={handleImageUpload} className="space-y-4">
-              <div>
-                <label htmlFor="imageName" className="block text-sm font-medium text-gray-700 mb-1">
-                  File Name
-                </label>
-                <input
-                  id="imageName"
-                  type="text"
-                  value={imageName}
-                  onChange={(e) => setImageName(e.target.value)}
-                  placeholder="Enter file name"
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="imageFile" className="block text-sm font-medium text-gray-700 mb-1">
-                  Choose File
-                </label>
-                <input
-                  id="imageFile"
-                  type="file"
-                  onChange={handleFileSelect}
-                  accept="image/*"
-                  className="block w-full text-sm text-gray-500
-                    file:mr-4 file:py-2 file:px-4
-                    file:rounded-md file:border-0
-                    file:text-sm file:font-semibold
-                    file:bg-blue-50 file:text-blue-700
-                    hover:file:bg-blue-100"
-                  required
-                />
-                <p className="mt-1 text-xs text-gray-500">Maximum file size: 5MB</p>
-              </div>
-              {uploadProgress > 0 && uploadProgress < 100 && (
-                <div className="mt-2">
-                  <div className="bg-gray-200 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${uploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1 text-center">{uploadProgress}% uploaded</p>
-                </div>
-              )}
-              <div className="flex justify-end space-x-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowUploadModal(false);
-                    setSelectedFile(null);
-                    setImageName('');
-                    setUploadProgress(0);
-                  }}
-                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={uploadProgress > 0 && uploadProgress < 100}
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {uploadProgress > 0 && uploadProgress < 100 ? 'Uploading...' : 'Upload'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      <FileUploadModal
+  showUploadModal={showUploadModal}
+  setShowUploadModal={setShowUploadModal}
+  selectedFile={selectedFile}
+  setSelectedFile={setSelectedFile}
+  imageName={imageName}
+  setImageName={setImageName}
+  uploadProgress={uploadProgress}
+  handleImageUpload={handleImageUpload}
+  handleFileSelect={handleFileSelect}
+  setUploadProgress={setUploadProgress}
+/>
     </div>
   );
 };
