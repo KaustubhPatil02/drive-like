@@ -50,7 +50,7 @@ const Dashboard = () => {
   // API Handlers
   const fetchFolders = async () => {
     try {
-      const { data } = await axios.get('https://drive-like.vercel.app/api/folders', {
+      const { data } = await axios.get('http://localhost:5000/api/folders', {
         headers: { Authorization: localStorage.getItem("token") },
       });
       setFolders(Array.isArray(data) ? data : []);
@@ -172,26 +172,26 @@ const Dashboard = () => {
   // Render Component
   return (
     <div className="min-h-screen bg-white pt-[64px]"> {/* Added pt-[64px] for navbar height */}
-  {/* Fixed Header */}
-  <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b">
-    <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
-      <div className="flex items-center space-x-4">
-        <button
-          onClick={() => setIsMobileMenuOpen(true)}
-          className="md:hidden text-gray-600 hover:text-gray-900"
-        >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
-        <h1 className="text-xl font-medium text-gray-800">Drive-Clone</h1>
-      </div>
-      <div className="flex items-center space-x-4">
-        {/* <Searchbar /> */}
-        <ProfileModal />
-      </div>
-    </div>
-  </nav>
+      {/* Fixed Header */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b">
+        <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden text-gray-600 hover:text-gray-900"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            </button>
+            <h1 className="text-xl font-medium text-gray-800">Drive-Clone</h1>
+          </div>
+          <div className="flex items-center space-x-4">
+            {/* <Searchbar /> */}
+            <ProfileModal />
+          </div>
+        </div>
+      </nav>
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
@@ -331,54 +331,54 @@ const Dashboard = () => {
 
             {/* Dropdown Menu */}
             {showNewOptions && (
-  <>
-    <div
-      className="fixed inset-0 z-10"
-      onClick={() => setShowNewOptions(false)}
-    />
-    <div className="absolute left-0 mt-1 w-60 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 py-1">
-      {/* New Folder Option */}
-      <button
-        onClick={handleCreateFolder}
-        className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
-      >
-        <div className="flex items-center justify-center">
-          <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
-          </svg>
-          <div className="flex flex-col items-center">
-            <span className="font-medium text-gray-900">New Folder</span>
-            <span className="text-xs text-gray-500">Create a new folder</span>
-          </div>
-        </div>
-      </button>
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowNewOptions(false)}
+                />
+                <div className="absolute left-0 mt-1 w-60 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 py-1">
+                  {/* New Folder Option */}
+                  <button
+                    onClick={handleCreateFolder}
+                    className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
+                  >
+                    <div className="flex items-center justify-center">
+                      <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                      </svg>
+                      <div className="flex flex-col items-center">
+                        <span className="font-medium text-gray-900">New Folder</span>
+                        <span className="text-xs text-gray-500">Create a new folder</span>
+                      </div>
+                    </div>
+                  </button>
 
-      {/* File Upload Option */}
-      <button
-        onClick={() => {
-          setShowUploadModal(true);
-          setShowNewOptions(false);
-        }}
-        className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
-      >
-        <div className="flex items-center justify-center">
-          <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-          </svg>
-          <div className="flex flex-col items-center">
-            <span className="font-medium text-gray-900">Upload File</span>
-            <span className="text-xs text-gray-500">Upload a file</span>
-          </div>
-        </div>
-      </button>
+                  {/* File Upload Option */}
+                  <button
+                    onClick={() => {
+                      setShowUploadModal(true);
+                      setShowNewOptions(false);
+                    }}
+                    className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
+                  >
+                    <div className="flex items-center justify-center">
+                      <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                      </svg>
+                      <div className="flex flex-col items-center">
+                        <span className="font-medium text-gray-900">Upload File</span>
+                        <span className="text-xs text-gray-500">Upload a file</span>
+                      </div>
+                    </div>
+                  </button>
 
-      {/* Optional: File Drop Zone Indicator */}
-      <div className="px-4 py-2 text-xs text-gray-500 border-t mt-1 text-center">
-        You can also drag files here
-      </div>
-    </div>
-  </>
-)}
+                  {/* Optional: File Drop Zone Indicator */}
+                  <div className="px-4 py-2 text-xs text-gray-500 border-t mt-1 text-center">
+                    You can also drag files here
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           <div className="space-y-2">
@@ -450,33 +450,33 @@ const Dashboard = () => {
 
           {/* Images Grid */}
           {images.length > 0 && (
-  <div>
-    <h3 className="text-sm font-medium text-gray-500 mb-4">Files</h3>
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-      {images.map((image) => (
-        <div
-          key={image._id}
-          className="group relative bg-white rounded-lg border hover:shadow-md transition-all overflow-hidden"
-        >
-          {/* Image Container */}
-          <div className="w-full h-32 relative">
-          <img
-  src={`https://drive-like-api.vercel.app/api/images/${image.url}`}
-  alt={image.name}
-  className="w-full h-full object-cover rounded-t-lg"
-/>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500 mb-4">Files</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+                {images.map((image) => (
+                  <div
+                    key={image._id}
+                    className="group relative bg-white rounded-lg border hover:shadow-md transition-all overflow-hidden"
+                  >
+                    {/* Image Container */}
+                    <div className="w-full h-32 relative">
+                      <img
+                        src={`https://drive-like-api.vercel.app/api/images/${image.url}`}
+                        alt={image.name}
+                        className="w-full h-full object-cover rounded-t-lg"
+                      />
 
-          </div>
-          {/* Image Name */}
-          <div className="p-2">
-            <p className="text-sm text-gray-700 truncate">{image.name}</p>
-          </div>
-        </div>
-      ))}
-      
-    </div>
-  </div>
-)}
+                    </div>
+                    {/* Image Name */}
+                    <div className="p-2">
+                      <p className="text-sm text-gray-700 truncate">{image.name}</p>
+                    </div>
+                  </div>
+                ))}
+
+              </div>
+            </div>
+          )}
 
 
           {/* Empty State */}
