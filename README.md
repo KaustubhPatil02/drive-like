@@ -14,7 +14,7 @@ Create a web application where users can register, create folders, upload images
 4. Create Nested Folders ✅
 5. Upload Image: Required fields: Name, Image ✅
 6. User-Specific Access: Users can only see the folders and images they have uploaded. ✅
-7. Search Images: Users can perform search operations only on their images.
+7. Search Images: Users can perform search operations only on their images. ✅
 
 ## Tech Stack:
 1. Back End: NodeJS
