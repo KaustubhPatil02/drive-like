@@ -192,11 +192,11 @@ const Dashboard = () => {
             <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <SearchBox 
+            <SearchBox
               onFolderClick={handleFolderClick}
             />
-             <ProfileModal /> 
-             
+            <ProfileModal />
+
           </div>
         </div>
       </nav>
@@ -213,7 +213,7 @@ const Dashboard = () => {
           <div className="fixed inset-y-0 left-0 flex flex-col w-72 bg-white">
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b">
-            <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
+              <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -347,7 +347,7 @@ const Dashboard = () => {
                 <div className="absolute left-0 mt-1 w-60 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 py-1">
                   {/* New Folder Option */}
                   <button
-                    onClick={()=> setShowCreateFolderModal(true)}
+                    onClick={() => setShowCreateFolderModal(true)}
                     className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
                   >
                     <div className="flex items-center justify-center">
@@ -360,7 +360,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </button>
-                  
+
 
                   {/* File Upload Option */}
                   <button
@@ -458,12 +458,14 @@ const Dashboard = () => {
           )}
 
           {/* Images Grid */}
-          <Files images={images} />
+          <div className="cursor-pointer">
+         <Files images={images} />
+         </div>
           <CreateFolderModal
-  showCreateFolderModal={showCreateFolderModal}
-  setShowCreateFolderModal={setShowCreateFolderModal}
-  handleCreateFolder={handleCreateFolder}
-/>
+            showCreateFolderModal={showCreateFolderModal}
+            setShowCreateFolderModal={setShowCreateFolderModal}
+            handleCreateFolder={handleCreateFolder}
+          />
 
 
           {/* Empty State */}
@@ -481,17 +483,17 @@ const Dashboard = () => {
 
       {/* Upload Modal */}
       <FileUploadModal
-  showUploadModal={showUploadModal}
-  setShowUploadModal={setShowUploadModal}
-  selectedFile={selectedFile}
-  setSelectedFile={setSelectedFile}
-  imageName={imageName}
-  setImageName={setImageName}
-  uploadProgress={uploadProgress}
-  handleImageUpload={handleImageUpload}
-  handleFileSelect={handleFileSelect}
-  setUploadProgress={setUploadProgress}
-/>
+        showUploadModal={showUploadModal}
+        setShowUploadModal={setShowUploadModal}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        imageName={imageName}
+        setImageName={setImageName}
+        uploadProgress={uploadProgress}
+        handleImageUpload={handleImageUpload}
+        handleFileSelect={handleFileSelect}
+        setUploadProgress={setUploadProgress}
+      />
     </div>
   );
 };

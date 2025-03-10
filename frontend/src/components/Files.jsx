@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ImagePreview from './Image-Preview';
 
 const Files = ({ images }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageClick = (image) => {
+    setSelectedImage(image);
+  };
+
+  const handleClosePreview = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <div>
       <h3 className="text-sm font-medium text-gray-500 mb-4">Files</h3>
@@ -9,6 +20,7 @@ const Files = ({ images }) => {
           <div
             key={image._id}
             className="group relative bg-white rounded-lg border hover:shadow-md transition-all overflow-hidden"
+            onClick={() => handleImageClick(image)}
           >
             <div className="w-full h-32 relative">
               <img
@@ -23,6 +35,9 @@ const Files = ({ images }) => {
           </div>
         ))}
       </div>
+      {selectedImage && (
+        <ImagePreview image={selectedImage} onClose={handleClosePreview} />
+      )}
     </div>
   );
 };
