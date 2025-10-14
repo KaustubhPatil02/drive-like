@@ -27,25 +27,25 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 px-4">
       <div className="max-w-[450px] w-full space-y-8 p-8">
         <div className="flex flex-col items-center">
-          <div className="flex justify-center w-full">
-            <h2 className="text-3xl font-bold text-blue-600">Drive-Clone</h2>
+          <div className="flex justify-center w-full mb-4">
+            <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Drive-Clone</h2>
           </div>
-          <h1 className="text-2xl font-normal text-gray-900">Sign in</h1>
-          <p className="mt-3 text-gray-600">to continue to Drive-Clone</p>
+          <h1 className="text-2xl font-semibold text-gray-900">Sign in</h1>
+          <p className="mt-2 text-gray-600">to continue to Drive-Clone</p>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
-          <div className="bg-white rounded-lg border border-gray-300 p-8 shadow-sm hover:shadow-md transition-shadow">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200 p-8 shadow-xl hover:shadow-2xl transition-shadow">
             <div className="space-y-6">
               <div>
                 <input
                   type="email"
                   name="email"
                   required
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  className="block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base transition-all"
                   placeholder="Email"
                   onChange={handleChange}
                   autoComplete="email"
@@ -56,7 +56,7 @@ const Login = () => {
                   type="password"
                   name="password"
                   required
-                  className="block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 text-base"
+                  className="block w-full px-4 py-3 border border-gray-300 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base transition-all"
                   placeholder="Password"
                   onChange={handleChange}
                   autoComplete="current-password"
@@ -73,13 +73,13 @@ const Login = () => {
             <div className="flex items-center justify-between mt-8">
               <Link
                 to="/register"
-                className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                className="text-sm text-blue-600 hover:text-blue-800 font-semibold"
               >
                 Create account
               </Link>
               <button
                 type="submit"
-                className="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
+                className="px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-lg hover:from-blue-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer transition-all duration-200 transform hover:scale-105 shadow-lg"
               >
                 Sign in
               </button>
