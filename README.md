@@ -11,7 +11,7 @@ A Google Drive-like web application that allows users to manage files and folder
 - [Live Demo](#live-demo)
 - [Getting Started](#getting-started)
 - [Environment Variables](#environment-variables)
-- [API Documentation](#api-documentation)
+- [Documentation](#documentation)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
 - [License](#license)
@@ -151,11 +151,16 @@ VITE_API_URL=http://localhost:5000
 
 For production, update `VITE_API_URL` to your deployed backend URL.
 
-## 📚 API Documentation
+## 📚 Documentation
 
-Detailed API documentation is available in [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
+This project includes comprehensive documentation:
 
-### Quick Reference
+- **[Setup Guide](SETUP.md)** - Detailed setup instructions for local development
+- **[API Documentation](API_DOCUMENTATION.md)** - Complete API reference with endpoints and examples
+- **[Security Guide](SECURITY.md)** - Security best practices and guidelines
+- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project
+
+### Quick API Reference
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - User login
 - `GET /api/folders` - Get user folders
