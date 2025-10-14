@@ -15,10 +15,10 @@ const FileUploadModal = ({
   if (!showUploadModal) return null;
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-  z-50 flex items-center justify-center p-4">
-      <div className="bg-gray-50 rounded-lg p-6 w-full max-w-md border-2">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 w-full max-w-md shadow-2xl border border-gray-200">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold">Upload File</h3>
+          <h3 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Upload File</h3>
           <button
             onClick={() => {
               setShowUploadModal(false);
@@ -26,7 +26,7 @@ const FileUploadModal = ({
               setImageName('');
               setUploadProgress(0);
             }}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-gray-500 hover:text-gray-700 transition-colors p-1 hover:bg-gray-100 rounded-lg"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -35,7 +35,7 @@ const FileUploadModal = ({
         </div>
         <form onSubmit={handleImageUpload} className="space-y-4">
           <div>
-            <label htmlFor="imageName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="imageName" className="block text-sm font-semibold text-gray-700 mb-2">
               File Name
             </label>
             <input
@@ -44,12 +44,12 @@ const FileUploadModal = ({
               value={imageName}
               onChange={(e) => setImageName(e.target.value)}
               placeholder="Enter file name"
-              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               required
             />
           </div>
           <div>
-            <label htmlFor="imageFile" className="block text-sm font-medium text-gray-700 mb-1">
+            <label htmlFor="imageFile" className="block text-sm font-semibold text-gray-700 mb-2">
               Choose File
             </label>
             <input
@@ -58,24 +58,24 @@ const FileUploadModal = ({
               onChange={handleFileSelect}
               accept="image/*"
               className="block w-full text-sm text-gray-500
-                file:mr-4 file:py-2 file:px-4
-                file:rounded-md file:border-0
+                file:mr-4 file:py-2.5 file:px-4
+                file:rounded-lg file:border-0
                 file:text-sm file:font-semibold
-                file:bg-blue-50 file:text-blue-700
-                hover:file:bg-blue-100"
+                file:bg-gradient-to-r file:from-blue-600 file:to-blue-500 file:text-white
+                hover:file:from-blue-700 hover:file:to-blue-600 file:transition-all file:cursor-pointer"
               required
             />
-            <p className="mt-1 text-xs text-gray-500">Maximum file size: 5MB</p>
+            <p className="mt-2 text-xs text-gray-500">Maximum file size: 5MB</p>
           </div>
           {uploadProgress > 0 && uploadProgress < 100 && (
-            <div className="mt-2">
-              <div className="bg-gray-200 rounded-full h-2">
+            <div className="mt-4">
+              <div className="bg-gray-200 rounded-full h-3 overflow-hidden">
                 <div
-                  className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 h-3 rounded-full transition-all duration-300"
                   style={{ width: `${uploadProgress}%` }}
                 ></div>
               </div>
-              <p className="text-sm text-gray-600 mt-1 text-center">{uploadProgress}% uploaded</p>
+              <p className="text-sm font-medium text-gray-700 mt-2 text-center">{uploadProgress}% uploaded</p>
             </div>
           )}
           <div className="flex justify-end space-x-3 mt-6">
@@ -87,14 +87,14 @@ const FileUploadModal = ({
                 setImageName('');
                 setUploadProgress(0);
               }}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+              className="px-6 py-2.5 text-sm font-semibold text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-all"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={uploadProgress > 0 && uploadProgress < 100}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-lg hover:from-blue-700 hover:to-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl"
             >
               {uploadProgress > 0 && uploadProgress < 100 ? 'Uploading...' : 'Upload'}
             </button>
