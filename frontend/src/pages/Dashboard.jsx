@@ -176,10 +176,10 @@ const Dashboard = () => {
 
   // Render Component
   return (
-    <div className="min-h-screen bg-white pt-[64px]"> {/* Added pt-[64px] for navbar height */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-[64px]"> {/* Added pt-[64px] for navbar height */}
       {/* Fixed Header */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm border-b">
-        <div className="max-w-full px-4 sm:px-6 lg:px-8 py-2 flex justify-between items-center">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-200">
+        <div className="max-w-full px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
           <div className="flex items-center space-x-4">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
@@ -189,7 +189,7 @@ const Dashboard = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
+            <h1 className="text-2xl text-blue-600 font-bold sm:text-xl">Drive-Clone</h1>
           </div>
           <div className="flex items-center space-x-4">
             <SearchBox
@@ -213,7 +213,7 @@ const Dashboard = () => {
           <div className="fixed inset-y-0 left-0 flex flex-col w-72 bg-white">
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b">
-              <h1 className="text2xl  text-blue-600 font-bold sm:text-l">Drive-Clone</h1>
+              <h1 className="text-2xl text-blue-600 font-bold sm:text-xl">Drive-Clone</h1>
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-gray-500 hover:text-gray-700"
@@ -230,22 +230,22 @@ const Dashboard = () => {
               <div className="relative">
                 <button
                   onClick={() => setShowNewOptions(!showNewOptions)}
-                  className="flex items-center justify-between w-full px-6 py-3 bg-white rounded-full shadow hover:shadow-md border border-gray-200 transition-all"
+                  className="flex items-center justify-between w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all"
                 >
                   <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    <span className="text-gray-700 font-medium">New</span>
+                    <span className="font-medium">New</span>
                   </div>
-                  <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
 
                 {/* New Options Dropdown */}
                 {showNewOptions && (
-                  <div className="absolute left-0 right-0 mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20">
+                  <div className="absolute left-0 right-0 mt-2 rounded-xl shadow-2xl bg-white ring-1 ring-black ring-opacity-5 z-20 overflow-hidden">
                     <div className="py-1">
                       <button
                         onClick={() => {
@@ -253,13 +253,13 @@ const Dashboard = () => {
                           setShowNewOptions(false);
                           setIsMobileMenuOpen(false);
                         }}
-                        className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all"
                       >
-                        <svg className="w-5 h-5 mr-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <svg className="w-6 h-6 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                         </svg>
                         <div className="flex flex-col items-start">
-                          <span className="font-medium">New Folder</span>
+                          <span className="font-semibold text-gray-900">New Folder</span>
                           <span className="text-xs text-gray-500">Create a new folder</span>
                         </div>
                       </button>
@@ -270,13 +270,13 @@ const Dashboard = () => {
                           setShowNewOptions(false);
                           setIsMobileMenuOpen(false);
                         }}
-                        className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50"
+                        className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all"
                       >
-                        <svg className="w-5 h-5 mr-3 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <svg className="w-6 h-6 mr-3 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                         </svg>
                         <div className="flex flex-col items-start">
-                          <span className="font-medium">Upload File</span>
+                          <span className="font-semibold text-gray-900">Upload File</span>
                           <span className="text-xs text-gray-500">Upload a file from your computer</span>
                         </div>
                       </button>
@@ -290,13 +290,13 @@ const Dashboard = () => {
                   handleBreadcrumbClick();
                   setIsMobileMenuOpen(false);
                 }}
-                className={`flex items-center space-x-2 w-full px-4 py-2 rounded-lg ${!currentFolder ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50'
+                className={`flex items-center space-x-2 w-full px-4 py-2.5 rounded-lg transition-all duration-200 ${!currentFolder ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' : 'text-gray-700 hover:bg-gray-50'
                   }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                 </svg>
-                <span>My Drive</span>
+                <span className="font-medium">My Drive</span>
               </button>
 
               {/* Current Path */}
@@ -321,18 +321,18 @@ const Dashboard = () => {
       {/* Main Content */}
       <div className="flex min-h-[calc(100vh-64px)]">
         {/* Desktop Sidebar */}
-        <div className="hidden md:block w-70 border-r bg-white p-4 space-y-4">
+        <div className="hidden md:block w-70 border-r border-gray-200 bg-white/50 backdrop-blur-sm p-4 space-y-4">
           <div className="relative">
             {/* Main New Button */}
             <button
               onClick={() => setShowNewOptions(!showNewOptions)}
-              className="flex items-center space-x-2 px-6 py-2 bg-white rounded-full shadow hover:shadow-md border border-gray-200 transition-all"
+              className="flex items-center space-x-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-full shadow-lg hover:shadow-xl hover:from-blue-700 hover:to-blue-600 transition-all duration-200 transform hover:scale-105"
             >
-              <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
-              <span className="text-gray-700 font-medium">New</span>
-              <svg className="w-4 h-4 text-gray-600 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <span className="font-medium">New</span>
+              <svg className="w-4 h-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
@@ -344,18 +344,18 @@ const Dashboard = () => {
                   className="fixed inset-0 z-10"
                   onClick={() => setShowNewOptions(false)}
                 />
-                <div className="absolute left-0 mt-1 w-60 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-20 py-1">
+                <div className="absolute left-0 mt-2 w-64 rounded-xl shadow-2xl bg-white ring-1 ring-black ring-opacity-5 z-20 py-2 overflow-hidden">
                   {/* New Folder Option */}
                   <button
                     onClick={() => setShowCreateFolderModal(true)}
-                    className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
+                    className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 group"
                   >
-                    <div className="flex items-center justify-center">
-                      <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <div className="flex items-center w-full">
+                      <svg className="w-6 h-6 mr-3 text-blue-500 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                       </svg>
-                      <div className="flex flex-col items-center">
-                        <span className="font-medium text-gray-900">New Folder</span>
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold text-gray-900">New Folder</span>
                         <span className="text-xs text-gray-500">Create a new folder</span>
                       </div>
                     </div>
@@ -368,22 +368,22 @@ const Dashboard = () => {
                       setShowUploadModal(true);
                       setShowNewOptions(false);
                     }}
-                    className="flex items-center justify-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 group"
+                    className="flex items-center w-full px-4 py-3 text-sm text-gray-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-200 group"
                   >
-                    <div className="flex items-center justify-center">
-                      <svg className="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <div className="flex items-center w-full">
+                      <svg className="w-6 h-6 mr-3 text-purple-500 group-hover:scale-110 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
                       </svg>
-                      <div className="flex flex-col items-center">
-                        <span className="font-medium text-gray-900">Upload File</span>
+                      <div className="flex flex-col items-start">
+                        <span className="font-semibold text-gray-900">Upload File</span>
                         <span className="text-xs text-gray-500">Upload a file</span>
                       </div>
                     </div>
                   </button>
 
                   {/* Optional: File Drop Zone Indicator */}
-                  <div className="px-4 py-2 text-xs text-gray-500 border-t mt-1 text-center">
-                    You can also drag files here
+                  <div className="px-4 py-2 text-xs text-gray-500 border-t mt-2 text-center bg-gradient-to-r from-blue-50 to-purple-50">
+                    💡 You can also drag files here
                   </div>
                 </div>
               </>
@@ -393,13 +393,13 @@ const Dashboard = () => {
           <div className="space-y-2">
             <button
               onClick={() => handleBreadcrumbClick()}
-              className={`flex items-center space-x-2 w-full px-3 py-2 rounded-lg ${!currentFolder ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-100'
+              className={`flex items-center space-x-2 w-full px-3 py-2.5 rounded-lg transition-all duration-200 ${!currentFolder ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md' : 'hover:bg-gray-100 text-gray-700'
                 }`}
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
               </svg>
-              <span>My Drive</span>
+              <span className="font-medium">My Drive</span>
             </button>
           </div>
         </div>
@@ -433,7 +433,7 @@ const Dashboard = () => {
           {/* Folders Grid */}
           {folders.length > 0 && (
             <div className="mb-8">
-              <h3 className="text-sm font-medium text-gray-500 mb-4">Folders</h3>
+              <h3 className="text-sm font-semibold text-gray-600 mb-4 uppercase tracking-wider">Folders</h3>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {folders
                   .filter(folder => folder.parentFolder === currentFolder)
@@ -441,13 +441,13 @@ const Dashboard = () => {
                     <div
                       key={folder._id}
                       onClick={() => handleFolderClick(folder._id)}
-                      className="group relative bg-white p-4 rounded-lg border hover:shadow-md transition-all cursor-pointer"
+                      className="group relative bg-white/80 backdrop-blur-sm p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-xl transition-all duration-200 cursor-pointer transform hover:-translate-y-1"
                     >
                       <div className="flex flex-col items-center">
-                        <svg className="w-12 h-12 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-14 h-14 text-blue-500 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                         </svg>
-                        <span className="mt-2 text-sm text-gray-700 truncate max-w-full">
+                        <span className="mt-2 text-sm font-medium text-gray-700 truncate max-w-full">
                           {folder.name}
                         </span>
                       </div>
